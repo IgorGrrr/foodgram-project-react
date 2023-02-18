@@ -1,19 +1,19 @@
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from requests import Response
-from rest_framework import status, viewsets
+from rest_framework import status, viewsets, generics
 from rest_framework.decorators import action
 from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, SAFE_METHODS
 from rest_framework.views import APIView
 
+from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
+from users.models import Subscription, User
 from .filters import IngredientSearchFilter, RecipeFilter
-from .mixins import ListRetrieveViewSet, ListViewSet
+from .mixins import ListRetrieveViewSet
 from .pagination import FoodGramPagination
 from .serializers import IngredientSerializer, TagSerializer, SubscriptionSerializer, CustomUserSerializer, \
     AccountSerializer, ShoppingCartSerializer, FavoriteSerializer, RecipeSerializer, CreateRecipeSerializer
 from .permissions import IsAdminOrReadOnly, IsAuthorOnly
-from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
-from users.models import Subscription, User
 
 from .utils import download_ingredients_txt
 
@@ -45,7 +45,7 @@ class CustomUserViewSet(UserViewSet):
             status=status.HTTP_200_OK)
 
 
-class SubscriptionViewSet(ListViewSet):
+class SubscriptionViewSet(generics.ListAPIView):
     """ Вьюсет для отображения подписок """
 
     queryset = Subscription.objects.all()
@@ -73,10 +73,9 @@ class SubscribeView(APIView):
             data=data,
             context={'request': request}
         )
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     @staticmethod
     def delete(request, id):
@@ -88,7 +87,7 @@ class SubscribeView(APIView):
             )
             subscription.delete()
             return Response(status=status.HTTP_204_NO_CONTENT)
-        return Response(status=status.HTTP_400_BAD_REQUEST)
+        return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class IngredientViewSet(ListRetrieveViewSet):
@@ -150,7 +149,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_204_NO_CONTENT)
         return Response(
             {'error': 'В избранном такого рецепта нет.'},
-            status=status.HTTP_400_BAD_REQUEST
+            status=status.HTTP_404_NOT_FOUND
         )
 
     @action(
@@ -166,7 +165,6 @@ class RecipeViewSet(viewsets.ModelViewSet):
 
     @action(methods=('GET',),
             detail=False,
-            url_path='download_shopping_cart',
             serializer_class=ShoppingCartSerializer,
             permission_classes=(IsAuthorOnly,))
     def download_shopping_cart(self, request):
@@ -191,7 +189,7 @@ class RecipeViewSet(viewsets.ModelViewSet):
                 'Рецепт удален из корзины.',
                 status=status.HTTP_204_NO_CONTENT)
         return Response({'error': 'В корзине нет этого рецепта.'},
-                        status=status.HTTP_400_BAD_REQUEST)
+                        status=status.HTTP_404_NOT_FOUND)
 
     @action(
         methods=('post', 'delete',),

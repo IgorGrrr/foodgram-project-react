@@ -6,7 +6,7 @@ from recipes.models import RecipeIngredient
 
 def download_ingredients_txt(request):
     ingredients = RecipeIngredient.objects.filter(
-        recipe__cart__user=request.user.id).values(
+        recipe__cart__user__id=request.user.id).values(
         'ingredients__name', 'ingredients__measurement_unit'
     ).annotate(total=Sum('amount'))
     shopping_cart = '\n'.join([

@@ -5,7 +5,7 @@ from rest_framework.validators import UniqueTogetherValidator
 
 from users.models import User, Subscription
 from recipes.models import (Ingredient, Tag, Recipe,
-                                    RecipeIngredient, Favorite, ShoppingCart)
+                            RecipeIngredient, Favorite, ShoppingCart)
 
 
 class CustomUserCreateSerializer(UserCreateSerializer):
@@ -70,27 +70,6 @@ class SignUpSerializer(UserCreateSerializer):
         fields = ('id', 'email', 'username',
                   'first_name', 'last_name', 'password',)
         extra_kwargs = {'password': {'write_only': True}}
-
-    def validate_username(self, username):
-        if username.lower() == 'me':
-            raise serializers.ValidationError('Недопустимое имя')
-        return username
-
-    def validate(self, data):
-        username = data.get('username')
-        email = data.get('email')
-        # password = data.get('password')
-        # password_verification(password)
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError(
-                detail='Нужно попробовать другой.',
-                code=status.HTTP_400_BAD_REQUEST
-            )
-        if User.objects.filter(email=email).exists():
-            raise serializers.ValidationError(
-                detail='Использование email повторно.',
-                code=status.HTTP_400_BAD_REQUEST)
-        return data
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -225,25 +204,25 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
         def validate(self, data):
             ingredients = self.initial_data.get('ingredients')
             ingredients_id = []
-            for i in ingredients:
-                amount = i['amount']
+            for ingredient in ingredients:
+                amount = ingredient['amount']
                 if int(amount) < 1:
                     raise serializers.ValidationError({
                         'amount': 'Количество не может быть меньше 1'
                     })
-                if i['id'] in ingredients_id:
+                if ingredient['id'] in ingredients_id:
                     raise serializers.ValidationError({
                         'ingredient': 'Ингредиент не может повторяться'
                     })
-                ingredients_id.append(i['id'])
+                ingredients_id.append(ingredient['id'])
             return data
 
         @staticmethod
         def create_ingredients(ingredients, recipe):
-            for i in ingredients:
-                ingredient = Ingredient.objects.get(id=i['id'])
+            for ingredient in ingredients:
+                ingredient = Ingredient.objects.get(id=ingredient['id'])
                 RecipeIngredient.objects.create(
-                    ingredient=ingredient, recipe=recipe, amount=i['amount']
+                    ingredient=ingredient, recipe=recipe, amount=ingredient['amount']
                 )
 
         def create(self, validated_data):
