@@ -222,7 +222,9 @@ class CreateRecipeSerializer(serializers.ModelSerializer):
             for ingredient in ingredients:
                 ingredient = Ingredient.objects.get(id=ingredient['id'])
                 RecipeIngredient.objects.create(
-                    ingredient=ingredient, recipe=recipe, amount=ingredient['amount']
+                    ingredient=ingredient,
+                    recipe=recipe,
+                    amount=ingredient['amount']
                 )
 
         def create(self, validated_data):
