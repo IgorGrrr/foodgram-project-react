@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.db.models import UniqueConstraint, CheckConstraint, Q, F
 from django.core.validators import RegexValidator
+from django.db import models
+from django.db.models import CheckConstraint, F, Q, UniqueConstraint
 
 
 class User(AbstractUser):

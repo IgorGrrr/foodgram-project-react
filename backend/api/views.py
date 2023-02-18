@@ -1,20 +1,25 @@
 from django.shortcuts import get_object_or_404
 from djoser.views import UserViewSet
 from requests import Response
-from rest_framework import status, viewsets, generics
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated, AllowAny, IsAuthenticatedOrReadOnly, SAFE_METHODS
+from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+                                        IsAuthenticated,
+                                        IsAuthenticatedOrReadOnly)
 from rest_framework.views import APIView
 
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from users.models import Subscription, User
+
 from .filters import IngredientSearchFilter, RecipeFilter
 from .mixins import ListRetrieveViewSet
 from .pagination import FoodGramPagination
-from .serializers import IngredientSerializer, TagSerializer, SubscriptionSerializer, CustomUserSerializer, \
-    AccountSerializer, ShoppingCartSerializer, FavoriteSerializer, RecipeSerializer, CreateRecipeSerializer
 from .permissions import IsAdminOrReadOnly, IsAuthorOnly
-
+from .serializers import (AccountSerializer, CreateRecipeSerializer,
+                          CustomUserSerializer, FavoriteSerializer,
+                          IngredientSerializer, RecipeSerializer,
+                          ShoppingCartSerializer, SubscriptionSerializer,
+                          TagSerializer)
 from .utils import download_ingredients_txt
 
 
