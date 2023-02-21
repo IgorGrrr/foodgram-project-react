@@ -13,8 +13,7 @@ from .filters import IngredientSearchFilter, RecipeFilter
 from .mixins import ListRetrieveViewSet
 from .pagination import FoodGramPagination
 from .permissions import IsAdminOrReadOnly, IsAuthorOnly
-from .serializers import (AccountSerializer, CreateRecipeSerializer,
-                          CustomUserSerializer, FavoriteSerializer,
+from .serializers import (CreateRecipeSerializer, FavoriteSerializer,
                           IngredientSerializer, RecipeSerializer,
                           ShoppingCartSerializer, SubscriptionSerializer,
                           TagSerializer)
