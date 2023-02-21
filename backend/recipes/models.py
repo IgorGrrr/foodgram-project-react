@@ -81,7 +81,7 @@ class Recipe(models.Model):
         verbose_name_plural = 'Рецепты'
 
     def __str__(self):
-        return self.description
+        return self.text
 
 
 class RecipeIngredient(models.Model):

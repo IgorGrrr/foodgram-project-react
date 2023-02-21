@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404
-from djoser.views import UserViewSet
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from requests import Response
 from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
-from rest_framework.permissions import (SAFE_METHODS, AllowAny,
+from rest_framework.permissions import (SAFE_METHODS,
                                         IsAuthenticated,
                                         IsAuthenticatedOrReadOnly)
 from rest_framework.views import APIView
@@ -20,33 +19,6 @@ from .serializers import (AccountSerializer, CreateRecipeSerializer,
                           ShoppingCartSerializer, SubscriptionSerializer,
                           TagSerializer)
 from .utils import download_ingredients_txt
-
-
-class CustomUserViewSet(UserViewSet):
-    """ Вьюсет для отображения пользователей """
-
-    serializer_class = CustomUserSerializer
-    queryset = User.objects.all()
-    permission_classes = (AllowAny,)
-    lookup_field = 'id'
-    pagination_class = FoodGramPagination
-    http_method_names = ['get', 'head', 'post']
-
-    @action(
-        methods=('GET', 'PATCH',),
-        detail=False,
-        url_path='me',
-        serializer_class=AccountSerializer,
-        permission_classes=(IsAuthenticated,)
-    )
-    def me(self, request):
-        user = request.user
-        serializer = self.get_serializer(user, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
-        return Response(
-            serializer.data,
-            status=status.HTTP_200_OK)
 
 
 class SubscriptionViewSet(generics.ListAPIView):

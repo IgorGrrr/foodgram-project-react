@@ -1,6 +1,6 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
-from rest_framework import serializers, validators
+from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import (Favorite, Ingredient, Recipe, RecipeIngredient,
@@ -39,47 +39,11 @@ class CustomUserSerializer(UserSerializer):
         ]
 
     def get_is_subscribed(self, obj):
-        request = self.context.get('request')
-        if request is None or request.user.is_anonymous:
+        user = self.context.get('request').user
+        if obj == user or user.is_anonymous:
             return False
         return Subscription.objects.filter(
-            user=request.user, author=obj
-        ).exists()
-
-
-class SignUpSerializer(UserCreateSerializer):
-    """ Сериализатор подписки. """
-
-    email = serializers.EmailField(
-        max_length=254,
-        validators=[validators.UniqueValidator(
-            queryset=User.objects.all(),
-            message='Такой email уже зарегистрирован',
-        )]
-    )
-    username = serializers.CharField(
-        max_length=150,
-        validators=[validators.UniqueValidator(
-            queryset=User.objects.all(),
-            message='Этот логин уже занят',
-        )]
-    )
-
-    class Meta:
-        model = User
-        fields = ('id', 'email', 'username',
-                  'first_name', 'last_name', 'password',)
-        extra_kwargs = {'password': {'write_only': True}}
-
-    def create(self, validated_data):
-        user = User.objects.create(
-            email=validated_data['email'],
-            username=validated_data['username'],
-            first_name=validated_data['first_name'],
-            last_name=validated_data['last_name'])
-        user.set_password(validated_data['password'])
-        user.save()
-        return user
+            author=obj, user=user).exists()
 
 
 class AccountSerializer(CustomUserSerializer):

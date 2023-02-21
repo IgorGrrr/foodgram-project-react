@@ -35,6 +35,7 @@ class User(AbstractUser):
     )
     last_name = models.CharField(
         max_length=150,
+
         verbose_name='Фамилия')
     password = models.CharField(
         max_length=150,
