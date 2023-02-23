@@ -8,8 +8,12 @@ services:
       - ./.env
 
   backend:
-    platform: linux/amd64
-    image: igorgrrr/backend
+#    platform: linux/amd64
+#    image: igorgrrr/backend
+
+    build:
+      context: ../backend
+      dockerfile: Dockerfile
     restart: always
     volumes:
       - static_value:/app/static/
@@ -20,8 +24,11 @@ services:
       - ./.env
 
   frontend:
-    platform: linux/amd64
-    image: igorgrrr/frontend
+#    platform: linux/amd64
+#    image: igorgrrr/frontend
+    build:
+      context: ../frontend
+      dockerfile: Dockerfile
     volumes:
       - ../frontend/:/app/result_build/
     depends_on:
