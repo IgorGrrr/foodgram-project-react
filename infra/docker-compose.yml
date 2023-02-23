@@ -8,6 +8,7 @@ services:
       - ./.env
 
   backend:
+    platform: linux/amd64
     image: igorgrrr/backend
     restart: always
     volumes:
@@ -19,6 +20,7 @@ services:
       - ./.env
 
   frontend:
+    platform: linux/amd64
     image: igorgrrr/frontend
     volumes:
       - ../frontend/:/app/result_build/
@@ -26,6 +28,7 @@ services:
       - backend
 
   nginx:
+    platform: linux/amd64
     image: nginx:1.21.3-alpine
     ports:
       - "80:80"
