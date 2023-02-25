@@ -1,5 +1,6 @@
 from djoser.serializers import UserCreateSerializer, UserSerializer
 from drf_extra_fields.fields import Base64ImageField
+from drf_writable_nested import WritableNestedModelSerializer
 from rest_framework import serializers
 from rest_framework.validators import UniqueTogetherValidator
 
@@ -142,7 +143,7 @@ class RecipeIngredientEditSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount']
 
 
-class CreateRecipeSerializer(serializers.ModelSerializer):
+class CreateRecipeSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
     """ Сериализатор создания и изменения рецепта. """
 
     author = CustomUserSerializer(read_only=True)
