@@ -1,7 +1,6 @@
 # Продуктовый помощник
 
-![Build Status](https://github.com/IgorGrrr/foodgram-project-react
-/actions/workflows/foodgram_workflow.yml/badge.svg)
+![Build Status](https://github.com/IgorGrrr/foodgram-project-react/actions/workflows/foodgram_workflow.yml/badge.svg)
 
 Сайт позволяет пользователям публиковать рецепты блюд, добавлять понравившиеся рецепты в избранное, подписываться на пользователей и скачивать список ингредиентов для покупок
 
