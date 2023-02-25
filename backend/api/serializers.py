@@ -143,7 +143,8 @@ class RecipeIngredientEditSerializer(serializers.ModelSerializer):
         fields = ['id', 'amount']
 
 
-class CreateRecipeSerializer(WritableNestedModelSerializer, serializers.ModelSerializer):
+class CreateRecipeSerializer(WritableNestedModelSerializer,
+                             serializers.ModelSerializer):
     """ Сериализатор создания и изменения рецепта. """
 
     author = CustomUserSerializer(read_only=True)
