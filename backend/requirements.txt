@@ -11,6 +11,7 @@ django-filter==22.1
 django-templated-mail==1.1.1
 djangorestframework==3.14.0
 djangorestframework-simplejwt==4.8.0
+drf_writable_nested
 gunicorn==20.1.0
 djoser
 idna==3.4
