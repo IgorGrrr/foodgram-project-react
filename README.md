@@ -42,4 +42,10 @@ docker-compose exec web python manage.py createsuperuser
 docker-compose exec web python manage.py collectstatic --no-input
 ```
 
-+ Проект запущен и доступен по [адресу](http://84.201.178.0/)
++ Загрузить ингредиенты и теги
+
+```
+sudo docker-compose exec -T backend python manage.py add_ingredients
+sudo docker-compose exec -T backend python manage.py add_tags
+```
++ Проект запущен и доступен по [адресу](http://84.201.152.191/)
