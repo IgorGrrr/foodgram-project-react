@@ -274,7 +274,7 @@ class ShowSubscriptionsSerializer(serializers.ModelSerializer):
         if limit:
             recipes = recipes[:int(limit)]
         return FavAndShoppingCartSerializer(
-                recipes, many=True, context=context).data
+            recipes, many=True, context=context).data
 
     def get_recipes_count(self, obj):
         return Recipe.objects.filter(author=obj).count()

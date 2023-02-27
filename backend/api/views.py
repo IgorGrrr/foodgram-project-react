@@ -2,7 +2,7 @@ from django.db.models.expressions import Exists, OuterRef
 from django.shortcuts import get_object_or_404
 from recipes.models import Favorite, Ingredient, Recipe, ShoppingCart, Tag
 from requests import Response
-from rest_framework import generics, status, viewsets, views
+from rest_framework import generics, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.permissions import (SAFE_METHODS,
                                         IsAuthenticated,
@@ -17,7 +17,7 @@ from .permissions import IsAdminOrAuthorOrReadOnly
 from .serializers import (CreateRecipeSerializer, FavAndShoppingCartSerializer,
                           IngredientSerializer, RecipeSerializer,
                           SubscriptionSerializer, TagSerializer)
-from .utils import download_ingredients_txt
+from .utils import download_ingredients_pdf
 
 
 class SubscriptionViewSet(generics.ListAPIView):
@@ -169,4 +169,4 @@ class RecipeViewSet(viewsets.ModelViewSet):
         permission_classes=[IsAuthenticated]
     )
     def download_shopping_cart(self, request):
-        return download_ingredients_txt(request)
+        return download_ingredients_pdf(request)
