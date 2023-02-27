@@ -42,9 +42,9 @@ class RecipeAdmin(admin.ModelAdmin):
 
 @admin.register(RecipeIngredient)
 class IngredientRecipeAdmin(admin.ModelAdmin):
-    list_display = ('pk', 'ingredients', 'amount',)
-    list_editable = ('ingredients', 'amount',)
-    list_filter = ('ingredients',)
+    list_display = ('pk', 'ingredient', 'amount',)
+    list_editable = ('ingredient', 'amount',)
+    list_filter = ('ingredient',)
     search_fields = ('ingredient_for_recipe__name',)
     empty_value_display = '-пусто-'
 
